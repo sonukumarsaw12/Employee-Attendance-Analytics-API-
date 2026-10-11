@@ -1,26 +1,107 @@
-# Candidate kit
+# Employee Attendance & Analytics API
 
-Read in this order:
+## Candidate Kit
 
-1. `PROBLEM_STATEMENT.docx`: what you are asked to do, how it is evaluated.
-2. `openapi.yaml`: the API contract and the business rules (R1 - R10).
-3. `DATA_MODEL.md`: what is stored in MongoDB, with nine sample documents.
-4. `app/main.py`: the starter. Put **all** your code in this one file. It must start with `uvicorn app.main:app --port 8000`.
-5. `REVIEW.md`, `DECISIONS.md`: templates to fill in.
+Read the following files in order:
 
-`sample_data/` holds the nine sample documents as MongoDB Extended JSON; `sample_seed.py` loads them. The grader's dataset is
-much larger and contains cases they do not show.
+1. `PROBLEM_STATEMENT.docx` — assignment requirements and evaluation criteria.
+2. `openapi.yaml` — API contract and business rules (R1–R10).
+3. `DATA_MODEL.md` — MongoDB collections, field types, and sample documents.
+4. `app/main.py` — application code. All application code is kept in this file.
+5. `REVIEW.md` and `DECISIONS.md` — code review findings and technical decisions.
 
-## Local setup
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env            # set MONGO_URI / MONGO_DB (local docker: docker run -p 27017:27017 mongo:7)
-python sample_seed.py
-uvicorn app.main:app --port 8000 --reload
+The `sample_data/` directory contains sample MongoDB Extended JSON documents, and `sample_seed.py` loads the sample data. The evaluation dataset may contain additional edge cases and more records than the provided sample.
+
+## Tech Stack
+
+- Python 3.11+
+- FastAPI
+- MongoDB 6.0+
+- PyMongo
+- Uvicorn
+
+## Local Setup
+
+Make sure MongoDB is running before starting the application.
+
+Create and activate a virtual environment.
+
+**Windows PowerShell:**
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
-MongoDB **6.0 or newer** is required (the grader uses 7.0). MongoDB Atlas free tier (M0) works.
 
-## Submit
-A public Git repository with `app/main.py`, `requirements.txt`, `REVIEW.md`, `DECISIONS.md` and a short `README.md`.
-No `.env`, no secrets, no Dockerfile.
+**Linux/macOS:**
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Configure the following environment variables:
+
+- `MONGO_URI` — MongoDB connection URI.
+- `MONGO_DB` — database name.
+
+For local development, these values can be stored in a `.env` file in the project root if the application loads it. Do not commit this file or any credentials to the repository.
+
+To load the provided sample data, run:
+
+```bash
+python sample_seed.py
+```
+
+Run this command only when you want to load the sample dataset into your configured database.
+
+## Run the Application
+
+From the project root, run:
+
+```bash
+python -m uvicorn app.main:app --port 8000
+```
+
+The API documentation is available at:
+
+`http://127.0.0.1:8000/docs`
+
+The health endpoint is available at:
+
+`http://127.0.0.1:8000/health`
+
+## Features
+
+- Employee creation and listing.
+- Attendance punch-in and punch-out.
+- Attendance regularization.
+- Monthly employee attendance analytics.
+- Department attendance summaries.
+- Late-arrival leaderboard.
+- Department attendance trends.
+- Query execution plans through the admin explain endpoint.
+
+## Implementation Notes
+
+The application reads MongoDB configuration from environment variables and creates its required indexes at startup. Attendance analytics are implemented using MongoDB aggregation pipelines.
+
+The provided sample dataset is useful for local testing, but additional edge cases should also be tested before considering the implementation complete.
+
+## Submission
+
+The required submission files are:
+
+- `app/main.py`
+- `requirements.txt`
+- `REVIEW.md`
+- `DECISIONS.md`
+- `README.md`
+
+Do not include `.env` files, secrets, Dockerfiles, virtual environments, or data dumps in the public repository.
